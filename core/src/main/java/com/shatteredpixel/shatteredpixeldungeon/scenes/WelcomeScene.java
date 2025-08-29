@@ -55,6 +55,7 @@ public class WelcomeScene extends PixelScene {
 	public void create() {
 		super.create();
 
+		Badges.loadGlobal();
 		final int previousVersion = SPDSettings.version();
 
 		if (FileUtils.cleanTempFiles()){
