@@ -942,9 +942,9 @@ public class Badges {
 	
 	public static boolean isUnlocked( Badge badge ) {
 	
-    loadGlobal();
-    return true;
-//		return global.contains( badge );
+//    loadGlobal();
+//    return true;
+		return global.contains( badge );
 		
 	}
 	
