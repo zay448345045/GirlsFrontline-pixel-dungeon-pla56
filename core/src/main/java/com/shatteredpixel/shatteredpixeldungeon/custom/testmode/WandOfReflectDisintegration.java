@@ -1,8 +1,10 @@
 package com.shatteredpixel.shatteredpixeldungeon.custom.testmode;
 
-import com.shatteredpixel.shatteredpixeldungeon.items.materials.MetalShard;
-import com.shatteredpixel.shatteredpixeldungeon.items.materials.GooBlob;
-
+import com.shatteredpixel.shatteredpixeldungeon.items.quest.MetalShard;
+//import com.shatteredpixel.shatteredpixeldungeon.items.materials.MetalShard;
+//import com.shatteredpixel.shatteredpixeldungeon.items.materials.GooBlob;
+import com.shatteredpixel.shatteredpixeldungeon.items.quest.GooBlob;
+    
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
