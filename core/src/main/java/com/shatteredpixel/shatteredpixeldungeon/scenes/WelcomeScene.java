@@ -166,7 +166,7 @@ public class WelcomeScene extends PixelScene {
 
 		//if the player has beaten Goo, automatically give all guidebook pages
 		if (previousVersion <= GirlsFrontlinePixelDungeon.v0_9_3c){
-			Badges.loadGlobal();
+	//		Badges.loadGlobal();
 			if (Badges.isUnlocked(Badges.Badge.BOSS_SLAIN_1)){
 				for (String page : Document.ADVENTURERS_GUIDE.pageNames()){
 					Document.ADVENTURERS_GUIDE.readPage(page);
