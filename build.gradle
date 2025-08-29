@@ -4,8 +4,8 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools:r8:8.7.18'
-        classpath 'com.android.tools.build:gradle:8.7.3'
+//        classpath 'com.android.tools:r8:8.7.18'
+        classpath 'com.android.tools.build:gradle:8.10.1'
     }
 }
 
@@ -18,7 +18,7 @@ allprojects {
         appVersionCode = 631
         appVersionName = '0.5.3'
 
-        appJavaCompatibility = JavaVersion.VERSION_1_8
+//        appJavaCompatibility = JavaVersion.VERSION_17 //1_8
 
         appAndroidCompileSDK = 34
         appAndroidMinSDK = 19
