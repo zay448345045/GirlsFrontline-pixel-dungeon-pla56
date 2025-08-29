@@ -100,14 +100,14 @@ public class WelcomeScene extends PixelScene {
 			@Override
 			protected void onClick() {
 				super.onClick();
-				if (previousVersion == 0 || SPDSettings.intro()){
+//				if (previousVersion == 0 || SPDSettings.intro()){
 					SPDSettings.version(GirlsFrontlinePixelDungeon.versionCode);
 					GamesInProgress.selectedClass = null;
 					new WndStartGame(GamesInProgress.firstEmpty());
-				} else {
-					updateVersion(previousVersion);
-					GirlsFrontlinePixelDungeon.switchScene(ZeroLevelScene.class);
-				}
+//				} else {
+//					updateVersion(previousVersion);
+//					GirlsFrontlinePixelDungeon.switchScene(ZeroLevelScene.class);
+//				}
 			}
 		};
 		float buttonY = Math.min(topRegion + (PixelScene.landscape() ? 60 : 120), h - 24);
