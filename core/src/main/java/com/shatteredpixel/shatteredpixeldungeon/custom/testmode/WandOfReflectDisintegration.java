@@ -28,10 +28,6 @@ import com.watabou.utils.Random;
 import java.util.ArrayList;
 
 public class WandOfReflectDisintegration extends WandOfDisintegration {
-    
-    {
-        image = ItemSpriteSheet.WAND_Reflect_DISINTEGRATION;
-    }
 
     public int min(int lvl){
         return 2+lvl;
@@ -307,21 +303,7 @@ public class WandOfReflectDisintegration extends WandOfDisintegration {
             return angle;
         }
     }
-    
-    public static class Recipe extends com.shatteredpixel.shatteredpixeldungeon.items.Recipe.SimpleRecipe {
 
-        {
-            inputs =  new Class[]{WandOfDisintegration.class, MetalShard.class, GooBlob.class};
-            inQuantity = new int[]{1, 1, 1};
-
-            cost = 5;
-
-            output = WandOfReflectDisintegration.class;
-            outQuantity = 1;
-
-        }
-
-    }
 
 }
 
