@@ -15,7 +15,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v5
+    - name: Checkout debug2 branch code
+      uses: actions/checkout@v5
+      with:
+        ref: 'debug2'
     - name: set up JDK 
       uses: actions/setup-java@v5
       with:
