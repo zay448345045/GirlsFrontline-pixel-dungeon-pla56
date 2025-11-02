@@ -429,7 +429,7 @@ public class DwarfKing extends Mob {
 			Game.runOnRenderThread(new Callback() {
 				@Override
 				public void call() {
-					GameScene.scene.add(new WndDialog(new Destroyer_Plot(),false));
+					GameScene.scene.add(new WndDialog(new Destroyer_Plot()));
 				}
 			});
 			for (Char ch : Actor.chars()){
@@ -526,7 +526,7 @@ public class DwarfKing extends Mob {
 			Dungeon.level.drop(new KingsCrown(), pos).sprite.drop();
 		}
 
-		Badges.validateBossSlain();
+		Badges.validateBossSlain(Badges.Badge.BOSS_SLAIN_4);
 
 		Dungeon.level.unseal();
 

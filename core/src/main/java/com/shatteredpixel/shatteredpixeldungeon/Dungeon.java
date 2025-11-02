@@ -62,6 +62,8 @@ import com.shatteredpixel.shatteredpixeldungeon.levels.PrisonBossLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.PrisonLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.SewerBossLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.SewerLevel;
+import com.shatteredpixel.shatteredpixeldungeon.levels.ZeroLevel;
+import com.shatteredpixel.shatteredpixeldungeon.levels.RabbitBossLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.secret.SecretRoom;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.special.SpecialRoom;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -69,6 +71,7 @@ import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.ui.QuickSlotButton;
 import com.shatteredpixel.shatteredpixeldungeon.utils.BArray;
 import com.shatteredpixel.shatteredpixeldungeon.utils.DungeonSeed;
+import com.shatteredpixel.shatteredpixeldungeon.utils.Gregorian;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndResurrect;
 import com.watabou.noosa.Game;
 import com.watabou.utils.Bundlable;
@@ -83,7 +86,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 
 public class Dungeon {
-
 	//enum of items which have limited spawns, records how many have spawned
 	//could all be their own separate numbers, but this allows iterating, much nicer for bundling/initializing.
 	public static enum LimitedDrops {
@@ -173,6 +175,7 @@ public class Dungeon {
 	public static SparseArray<ArrayList<Item>> portedItems;
 
 	public static int version;
+	public static int levelId;
 
 	public static long seed;
 	
@@ -181,22 +184,25 @@ public class Dungeon {
 		version = Game.versionCode;
 		challenges = SPDSettings.challenges();
 		mobsToChampion = -1;
-
+	
 		seed = DungeonSeed.randomSeed();
-
+	
 		Actor.clear();
 		Actor.resetNextID();
 		
 		Random.pushGenerator( seed );
-
+	
 			Scroll.initLabels();
 			Potion.initColors();
 			Ring.initGems();
-
+	
 			SpecialRoom.initForRun();
 			SecretRoom.initForRun();
-
+	
 		Random.resetGenerators();
+		
+		// 添加农历节日检测
+		Gregorian.LunarCheckDate();
 		
 		Statistics.reset();
 		Notes.reset();
@@ -233,12 +239,11 @@ public class Dungeon {
 		return (challenges & mask) != 0;
 	}
 	
-	public static Level newLevel() {
-		
+	public static Level newLevel(Level level,int levelDepth,int id){
 		Dungeon.level = null;
 		Actor.clear();
-		
-		depth++;
+
+		depth=levelDepth;
 		if (depth > Statistics.deepestFloor) {
 			Statistics.deepestFloor = depth;
 			
@@ -248,76 +253,50 @@ public class Dungeon {
 				Statistics.completedWithNoKilling = false;
 			}
 		}
-		
+
+		level.create(depth,id);
+		Statistics.qualifiedForNoKilling = !bossLevel();
+		return level;
+	}
+
+	public static Level newLevel(int id){
 		Level level;
-		switch (depth) {
-		case 1:
-		case 2:
-		case 3:
-		case 4:
-			level = new SewerLevel();
-			break;
+		switch(id){
+		case 0:
+			level = new ZeroLevel();break;
+		case 1:case 2:case 3:case 4:
+			level = new SewerLevel();break;
 		case 5:
-			level = new SewerBossLevel();
-			break;
-		case 6:
-		case 7:
-		case 8:
-		case 9:
-			level = new PrisonLevel();
-			break;
+			level = new SewerBossLevel();break;
+		case 6:case 7:case 8:case 9:
+			level = new PrisonLevel();break;
 		case 10:
-			level = new PrisonBossLevel();
-			break;
-		case 11:
-		case 12:
-		case 13:
-		case 14:
-			level = new CavesLevel();
-			break;
+			level = new PrisonBossLevel();break;
+		case 1010:
+			level = new RabbitBossLevel();break;
+		case 11:case 12:case 13:case 14:
+			level = new CavesLevel();break;
 		case 15:
-			level = new CavesBossLevel();
-			break;
-		case 16:
-		case 17:
-		case 18:
-		case 19:
-			level = new CityLevel();
-			break;
+			level = new CavesBossLevel();break;
+		case 16:case 17:case 18:case 19:
+			level = new CityLevel();break;
 		case 20:
-			level = new CityBossLevel();
-			break;
-		case 21:
-		case 22:
-		case 23:
-		case 24:
-			level = new DeepCaveLevel();
-			break;
+			level = new CityBossLevel();break;
+		case 21:case 22:case 23:case 24:
+			level = new DeepCaveLevel();break;
 		case 25:
-			level = new DeepCaveBossLevel();
-			break;
-		case 26:
-		case 27:
-		case 28:
-		case 29:
-			level = new HallsLevel();
-			break;
+			level = new DeepCaveBossLevel();break;
+		case 26:case 27:case 28:case 29:
+			level = new HallsLevel();break;
 		case 30:
-			level = new HallsBossLevel();
-			break;
+			level = new HallsBossLevel();break;
 		case 31:
-			level = new LastLevel();
-			break;
+			level = new LastLevel();break;
 		default:
 			level = new DeadEndLevel();
-			Statistics.deepestFloor--;
 		}
 		
-		level.create();
-		
-		Statistics.qualifiedForNoKilling = !bossLevel();
-		
-		return level;
+		return newLevel(level,id%1000,id);
 	}
 	
 	public static void resetLevel() {
@@ -326,6 +305,10 @@ public class Dungeon {
 		
 		level.reset();
 		switchLevel( level, level.entrance );
+	}
+
+	public static int curDepth(){
+		return depth%1000;
 	}
 
 	public static long seedCurDepth(){
@@ -366,6 +349,7 @@ public class Dungeon {
 		
 		PathFinder.setMapSize(level.width(), level.height());
 		
+		levelId=level.levelId;
 		Dungeon.level = level;
 		Mob.restoreAllies( level, pos );
 		Actor.init();
@@ -450,26 +434,28 @@ public class Dungeon {
 		return Random.Int(5 - floorThisSet) < asLeftThisSet;
 	}
 	
-	private static final String VERSION		= "version";
-	private static final String SEED		= "seed";
-	private static final String CHALLENGES	= "challenges";
-	private static final String MOBS_TO_CHAMPION	= "mobs_to_champion";
-	private static final String HERO		= "hero";
-	private static final String DEPTH		= "depth";
-	private static final String GOLD		= "gold";
-	private static final String ENERGY		= "energy";
-	private static final String DROPPED     = "dropped%d";
-	private static final String PORTED      = "ported%d";
-	private static final String LEVEL		= "level";
-	private static final String LIMDROPS    = "limited_drops";
-	private static final String CHAPTERS	= "chapters";
-	private static final String QUESTS		= "quests";
-	private static final String BADGES		= "badges";
+	private static final String LEVEL_ID        = "level_id";
+	private static final String VERSION		    = "version";
+	private static final String SEED		    = "seed";
+	private static final String CHALLENGES	    = "challenges";
+	private static final String MOBS_TO_CHAMPION= "mobs_to_champion";
+	private static final String HERO		    = "hero";
+	private static final String DEPTH		    = "depth";
+	private static final String GOLD		    = "gold";
+	private static final String ENERGY		    = "energy";
+	private static final String DROPPED         = "dropped%d";
+	private static final String PORTED          = "ported%d";
+	private static final String LEVEL		    = "level";
+	private static final String LIMDROPS        = "limited_drops";
+	private static final String CHAPTERS	    = "chapters";
+	private static final String QUESTS		    = "quests";
+	private static final String BADGES		    = "badges";
 	
 	public static void saveGame( int save ) {
 		try {
 			Bundle bundle = new Bundle();
 
+			bundle.put( LEVEL_ID,levelId);
 			version = Game.versionCode;
 			bundle.put( VERSION, version );
 			bundle.put( SEED, seed );
@@ -538,7 +524,7 @@ public class Dungeon {
 		Bundle bundle = new Bundle();
 		bundle.put( LEVEL, level );
 		
-		FileUtils.bundleToFile(GamesInProgress.depthFile( save, depth), bundle);
+		FileUtils.bundleToFile(GamesInProgress.depthFile(save,level.levelId),bundle);
 	}
 	
 	public static void saveAll() throws IOException {
@@ -557,9 +543,9 @@ public class Dungeon {
 	}
 	
 	public static void loadGame( int save, boolean fullLoad ) throws IOException {
-		
 		Bundle bundle = FileUtils.bundleFromFile( GamesInProgress.gameFile( save ) );
 
+		levelId = bundle.getInt( LEVEL_ID );
 		version = bundle.getInt( VERSION );
 
 		seed = bundle.contains( SEED ) ? bundle.getLong( SEED ) : DungeonSeed.randomSeed();
@@ -570,11 +556,11 @@ public class Dungeon {
 		quickslot.reset();
 		QuickSlotButton.reset();
 
-		Dungeon.challenges = bundle.getInt( CHALLENGES );
-		Dungeon.mobsToChampion = bundle.getInt( MOBS_TO_CHAMPION );
-		
 		Dungeon.level = null;
 		Dungeon.depth = -1;
+
+		Dungeon.challenges = bundle.getInt( CHALLENGES );
+		Dungeon.mobsToChampion = bundle.getInt( MOBS_TO_CHAMPION );
 		
 		Scroll.restore( bundle );
 		Potion.restore( bundle );
@@ -656,13 +642,27 @@ public class Dungeon {
 			}
 		}
 	}
+
+	public static Level tryLoadLevel(int levelId){
+		final int save=GamesInProgress.curSlot;
+		final String fileName=GamesInProgress.depthFile(save,levelId);
+		if(FileUtils.fileExists(fileName)){
+			//file may be deleted between fileExists and loadLevel,who knows.
+			try{
+				return loadLevel(save,levelId);
+			}catch(IOException e){
+				Game.reportException(e);
+			}
+		}
+
+		return null;
+	}
 	
-	public static Level loadLevel( int save ) throws IOException {
-		
+	public static Level loadLevel(int save,int levelId) throws IOException {
 		Dungeon.level = null;
 		Actor.clear();
 		
-		Bundle bundle = FileUtils.bundleFromFile( GamesInProgress.depthFile( save, depth)) ;
+		Bundle bundle = FileUtils.bundleFromFile( GamesInProgress.depthFile(save,levelId));
 		
 		Level level = (Level)bundle.get( LEVEL );
 		

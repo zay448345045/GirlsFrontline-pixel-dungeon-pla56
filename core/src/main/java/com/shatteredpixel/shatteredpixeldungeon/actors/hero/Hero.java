@@ -52,6 +52,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Momentum;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Paralysis;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Regeneration;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.SnipersMark;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.StarShield;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Vertigo;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.ArmorAbility;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.huntress.NaturesPower;
@@ -115,6 +116,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfLivingEarth;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.SpiritBow;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.DMR.AK47;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.DMR.M99;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.MissileWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Document;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Notes;
@@ -122,6 +124,7 @@ import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.levels.features.Chasm;
 import com.shatteredpixel.shatteredpixeldungeon.levels.traps.Trap;
+import com.shatteredpixel.shatteredpixeldungeon.levels.triggers.Trigger;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.ShadowCaster;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Earthroot;
@@ -219,8 +222,22 @@ public class Hero extends Char {
 	
 	public void updateHT( boolean boostHP ){
 		int curHT = HT;
+		int baseHT;
 		
-		HT = 20 + 5*(lvl-1) + HTBoost;
+		// GSH18角色：初始血量为默认的80%，10级后升级获得的生命值为默认的50%
+		if (heroClass == HeroClass.GSH18) {
+			if (lvl <= 10) {
+				baseHT = 20 + 5*(lvl-1);
+				HT = Math.round(baseHT * 0.8f);
+			} else {
+				baseHT = 20 + 5*9 + 5*(lvl-10)/2; // 10级及以下每级5点，11级及以上每级2.5点（向下取整为2点）
+				HT = Math.round(baseHT * 0.8f);
+			}
+		} else {
+			HT = 20 + 5*(lvl-1);
+		}
+		
+		HT += HTBoost;
 		float multiplier = RingOfMight.HTMultiplier(this);
 		HT = Math.round(multiplier * HT);
 		
@@ -243,11 +260,12 @@ public class Hero extends Char {
 		if (buff != null){
 			strBonus += buff.boost();
 		}
-
+		
 		Hunger hunger = buff(Hunger.class);
-		if (hunger != null && hunger.isStarving() && heroClass == HeroClass.TYPE561){
+		if (hunger != null && hunger.isStarving() && heroClass == HeroClass.TYPE561 && STR >= 13){
 			strBonus -= 1;
 		}
+
 
 		if (hasTalent(Talent.STRONGMAN)){
 			strBonus += (int)Math.floor(STR * (0.03f + 0.05f*pointsInTalent(Talent.STRONGMAN)));
@@ -285,6 +303,12 @@ public class Hero extends Char {
 		bundle.put( LEVEL, lvl );
 		bundle.put( EXPERIENCE, exp );
 		
+		// 保存饥饿值
+		Hunger hunger = buff(Hunger.class);
+		if (hunger != null) {
+			bundle.put("hunger", (int)hunger.hunger());
+		}
+		
 		bundle.put( HTBOOST, HTBoost );
 
 		belongings.storeInBundle( bundle );
@@ -319,6 +343,12 @@ public class Hero extends Char {
 		info.hp = bundle.getInt( Char.TAG_HP );
 		info.ht = bundle.getInt( Char.TAG_HT );
 		info.shld = bundle.getInt( Char.TAG_SHLD );
+		// 尝试从bundle中读取饥饿值，如果不存在则默认为0
+		if (bundle.contains("hunger")) {
+			info.hunger = bundle.getInt("hunger");
+		} else {
+			info.hunger = 0;
+		}
 		info.heroClass = bundle.getEnum( CLASS, HeroClass.class );
 		info.subClass = bundle.getEnum( SUBCLASS, HeroSubClass.class );
 		Belongings.preview( info, bundle );
@@ -459,6 +489,20 @@ public class Hero extends Char {
 			case 3:accuracy*=2f;break;
 		}
 		
+		// GSH18天赋：短线作战
+		if (hasTalent(Talent.GSH18_CLOSE_COMBAT) && Dungeon.level.adjacent(pos, target.pos)) {
+			switch(pointsInTalent(Talent.GSH18_CLOSE_COMBAT)){
+				case 1:accuracy*=1.2f;break; // +1级：攻击距离为1的敌人时，命中率增加20%
+				case 2:accuracy*=1.45f;break;  // +2级：攻击距离为1的敌人时，命中率增加45%
+			}
+		}
+		
+		// GSH18天赋：元气一餐 +1级效果
+		if (hasTalent(Talent.GSH18_ENERGIZING_MEAL) && pointsInTalent(Talent.GSH18_ENERGIZING_MEAL) >= 1 && buff(Talent.GSH18EnergizingMealTracker.class) != null) {
+			// 下次攻击必定命中，设置一个非常高的accuracy值，变成测试枪了（）
+			accuracy *= 1000f;
+		}
+		
 		if (wep instanceof MissileWeapon){
 			if (Dungeon.level.adjacent( pos, target.pos )) {
 				accuracy *= (0.5f + 0.2f*pointsInTalent(Talent.POINT_BLANK));
@@ -582,6 +626,11 @@ public class Hero extends Char {
 			speed *= (2f + 0.25f*pointsInTalent(Talent.GROWING_POWER));
 		}
 		
+		// 后勤保证天赋效果：拥有星之护盾时增加移动速度
+		if (hasTalent(Talent.GSH18_LOGISTICS_SUPPORT) && buff(StarShield.class) != null && buff(StarShield.class).shielding() > 0) {
+			speed *= (1f + 0.1f * pointsInTalent(Talent.GSH18_LOGISTICS_SUPPORT));
+		}
+		
 		return speed;
 		
 	}
@@ -589,8 +638,8 @@ public class Hero extends Char {
 	public boolean canSurpriseAttack(){
 		if (belongings.weapon() == null || !(belongings.weapon() instanceof Weapon))    return true;
 		if (STR() < ((Weapon)belongings.weapon()).STRReq())                             return false;
-		if (belongings.weapon() instanceof AK47)                                       return false;
-
+		if (belongings.weapon() instanceof AK47 || belongings.weapon() instanceof M99)   return false;
+		//ak47和m99都无法偷袭了
 		return true;
 	}
 
@@ -602,6 +651,14 @@ public class Hero extends Char {
 		//can always attack adjacent enemies
 		if (Dungeon.level.adjacent(pos, enemy.pos)) {
 			return true;
+		}
+
+		// GSH18天赋：元气一餐 +2级效果 - 攻击范围增加1格
+		if (hasTalent(Talent.GSH18_ENERGIZING_MEAL) && pointsInTalent(Talent.GSH18_ENERGIZING_MEAL) >= 2 && buff(Talent.GSH18EnergizingMealTracker.class) != null) {
+			// 检查是否在2格范围内
+			if (Dungeon.level.distance(pos, enemy.pos) <= 2 && Dungeon.level.heroFOV[enemy.pos]) {
+				return true;
+			}
 		}
 
 		KindOfWeapon wep = Dungeon.hero.belongings.weapon();
@@ -707,34 +764,26 @@ public class Hero extends Char {
 			
 			if (curAction instanceof HeroAction.Move) {
 				actResult = actMove( (HeroAction.Move)curAction );
-				
 			} else if (curAction instanceof HeroAction.Interact) {
 				actResult = actInteract( (HeroAction.Interact)curAction );
-				
 			} else if (curAction instanceof HeroAction.Buy) {
 				actResult = actBuy( (HeroAction.Buy)curAction );
-				
 			}else if (curAction instanceof HeroAction.PickUp) {
 				actResult = actPickUp( (HeroAction.PickUp)curAction );
-				
 			} else if (curAction instanceof HeroAction.OpenChest) {
 				actResult = actOpenChest( (HeroAction.OpenChest)curAction );
-				
 			} else if (curAction instanceof HeroAction.Unlock) {
 				actResult = actUnlock((HeroAction.Unlock) curAction);
-				
+			} else if (curAction instanceof HeroAction.InteractTrigger) {
+				actResult = actTrigger( (HeroAction.InteractTrigger)curAction );
 			} else if (curAction instanceof HeroAction.Descend) {
 				actResult = actDescend( (HeroAction.Descend)curAction );
-				
 			} else if (curAction instanceof HeroAction.Ascend) {
 				actResult = actAscend( (HeroAction.Ascend)curAction );
-				
 			} else if (curAction instanceof HeroAction.Attack) {
 				actResult = actAttack( (HeroAction.Attack)curAction );
-				
 			} else if (curAction instanceof HeroAction.Alchemy) {
 				actResult = actAlchemy( (HeroAction.Alchemy)curAction );
-				
 			} else {
 				actResult = false;
 			}
@@ -1019,6 +1068,20 @@ public class Hero extends Char {
 			return false;
 		}
 	}
+
+	private boolean actTrigger(HeroAction.InteractTrigger action){
+		Trigger trigger = action.trigger;
+		if (trigger.canInteract(this)){
+			ready();
+			sprite.turnTo(pos,trigger.pos);
+			return trigger.interact(this);
+		}else if(getCloser(trigger.pos)){
+			return true;
+		}else{
+			ready();
+			return false;
+		}
+	}
 	
 	private boolean actDescend( HeroAction.Descend action ) {
 		int stairs = action.dst;
@@ -1164,6 +1227,11 @@ public class Hero extends Char {
 		}
 
 		damage = Talent.onAttackProc( this, enemy, damage );
+		
+		// GSH18天赋：元气一餐 - 攻击后移除追踪buff
+		if (buff(Talent.GSH18EnergizingMealTracker.class) != null) {
+			buff(Talent.GSH18EnergizingMealTracker.class).detach();
+		}
 		
 		switch (subClass) {
 		case SNIPER:
@@ -1451,7 +1519,6 @@ public class Hero extends Char {
 	}
 	
 	public boolean handle( int cell ) {
-		
 		if (cell == -1) {
 			return false;
 		}
@@ -1465,17 +1532,13 @@ public class Hero extends Char {
 		Heap heap = Dungeon.level.heaps.get( cell );
 		
 		if (Dungeon.level.map[cell] == Terrain.ALCHEMY && cell != pos) {
-			
 			curAction = new HeroAction.Alchemy( cell );
-			
 		} else if (fieldOfView[cell] && ch instanceof Mob) {
-
 			if (ch.alignment != Alignment.ENEMY && ch.buff(Amok.class) == null) {
 				curAction = new HeroAction.Interact( ch );
 			} else {
 				curAction = new HeroAction.Attack( ch );
 			}
-
 		} else if (heap != null
 				//moving to an item doesn't auto-pickup when enemies are near...
 				&& (visibleEnemies.size() == 0 || cell == pos ||
@@ -1494,24 +1557,18 @@ public class Hero extends Char {
 			default:
 				curAction = new HeroAction.OpenChest( cell );
 			}
-			
-		} else if (Dungeon.level.map[cell] == Terrain.LOCKED_DOOR || Dungeon.level.map[cell] == Terrain.CRYSTAL_DOOR || Dungeon.level.map[cell] == Terrain.LOCKED_EXIT) {
-			
+		} else if (Dungeon.level.map[cell] == Terrain.LOCKED_DOOR || Dungeon.level.map[cell] == Terrain.CRYSTAL_DOOR || Dungeon.level.map[cell] == Terrain.LOCKED_EXIT) {			
 			curAction = new HeroAction.Unlock( cell );
-			
+		} else if (Dungeon.level.triggers.get(cell)!=null && Dungeon.level.triggers.get(cell).canBeTouched()){
+			curAction = new HeroAction.InteractTrigger(Dungeon.level.triggers.get(cell));
 		} else if ((cell == Dungeon.level.exit || Dungeon.level.map[cell] == Terrain.EXIT || Dungeon.level.map[cell] == Terrain.UNLOCKED_EXIT)
-				&& Dungeon.depth < Constants.MAX_DEPTH) {
-			
+		&& Dungeon.depth < Constants.MAX_DEPTH) {
 			curAction = new HeroAction.Descend( cell );
-			
 		} else if (cell == Dungeon.level.entrance || Dungeon.level.map[cell] == Terrain.ENTRANCE) {
-			
 			curAction = new HeroAction.Ascend( cell );
-			
 		} else  {
-			
 			if (!Dungeon.level.visited[cell] && !Dungeon.level.mapped[cell]
-					&& Dungeon.level.traps.get(cell) != null && Dungeon.level.traps.get(cell).visible) {
+			&& Dungeon.level.traps.get(cell) != null && Dungeon.level.traps.get(cell).visible) {
 				walkingToVisibleTrapInFog = true;
 			} else {
 				walkingToVisibleTrapInFog = false;
@@ -1519,7 +1576,6 @@ public class Hero extends Char {
 			
 			curAction = new HeroAction.Move( cell );
 			lastAction = null;
-			
 		}
 
 		return true;
@@ -1858,6 +1914,11 @@ public class Hero extends Char {
 
 		if (hit && subClass == HeroSubClass.GLADIATOR){
 			Buff.affect( this, Combo.class ).hit( enemy );
+		}
+		
+		// GSH18天赋：元气一餐 - 攻击后移除buff
+		if (buff(Talent.GSH18EnergizingMealTracker.class) != null) {
+			buff(Talent.GSH18EnergizingMealTracker.class).detach();
 		}
 
 		curAction = null;

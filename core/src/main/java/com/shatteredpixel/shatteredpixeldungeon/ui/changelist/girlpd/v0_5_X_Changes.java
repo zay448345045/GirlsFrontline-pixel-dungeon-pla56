@@ -3,6 +3,7 @@ package com.shatteredpixel.shatteredpixeldungeon.ui.changelist.girlpd;
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Goo;
 import com.shatteredpixel.shatteredpixeldungeon.effects.BadgeBanner;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.ChangesScene;
@@ -24,13 +25,156 @@ import com.watabou.noosa.Image;
 
 import java.util.ArrayList;
 
+//求你们别乱加我的更新文本了，求求了！！！
+//055更新：完善了灵刀机制-技能击败敌人10%概率升级，最高升5级，cd100回合。你写完删了这里就行
+
 public class v0_5_X_Changes {
     public static void addAllChanges(ArrayList<ChangeInfo> changeInfos) {
+    	add_0_5_4_5_Changes(changeInfos);
+    	add_0_5_4_3_Changes(changeInfos);
+    	add_0_5_4_1_Changes(changeInfos);
     	add_0_5_3_Changes(changeInfos);
 		add_0_5_2_Changes(changeInfos);
 		add_0_5_1_Changes(changeInfos);
 		add_0_5_0_Changes(changeInfos);
     }
+
+     public static void add_0_5_4_5_Changes( ArrayList<ChangeInfo> changeInfos ){
+        ChangeInfo changes = new ChangeInfo("v0.5.4.5", true, "");
+        changes.hardlight( Window.TITLE_COLOR );
+		changeInfos.add(changes);
+
+		changes = new ChangeInfo(Messages.get(ChangesScene.class, "buffs"), false, null);
+		changes.hardlight( CharSprite.POSITIVE );
+		changeInfos.add(changes);
+
+		changes.addButton( new ChangeButton(new ItemSprite(ItemSpriteSheet.ARTIFACT_ROSE3, null), "某人的刺刀",
+			"_-_ 当AR15被召唤出期间，刺刀通过收集心智碎片获得了升级，AR15将获得生命值回复。"
+		 ));
+
+        changes = new ChangeInfo(Messages.get(ChangesScene.class, "changes"), false, null);
+		changes.hardlight( CharSprite.WARNING );
+		changeInfos.add(changes);
+
+        changes.addButton( new ChangeButton(new ItemSprite(ItemSpriteSheet.MAGNUMWEDDING, null), "BUG修复",
+        	 "_-_ 修复了艾尔菲尔特系列武器导致游戏崩溃的一系列问题。\n"
+        	));
+    }
+
+    public static void add_0_5_4_3_Changes( ArrayList<ChangeInfo> changeInfos ){
+        ChangeInfo changes = new ChangeInfo("v0.5.4.3", true, "");
+        changes.hardlight( Window.TITLE_COLOR );
+		changeInfos.add(changes);
+
+    changes = new ChangeInfo(Messages.get(ChangesScene.class, "buffs"), false, null);
+		changes.hardlight( CharSprite.POSITIVE );
+		changeInfos.add(changes);
+
+		changes.addButton( new ChangeButton(new ItemSprite(ItemSpriteSheet.LAR, null), "灰熊MK-V",
+			"_-_ 灰熊MK-V减少了1点使用所需的基础力量要求。\n" +
+			"_-_ 略微提高了升级提供了伤害提升。"
+		));
+        
+        changes.addButton(new ChangeButton(new ItemSprite(ItemSpriteSheet.NTW20, null), "NTW-20",
+            "_-_ 为NTW-20增加了武器技能，在瞄准模式下将可以更快的进行强力攻击\n"+
+            "_-_ 瞄准模式下，攻击的伤害区间为武器最高伤害的85%-120%，且精准度提升"
+        ));
+
+        changes.addButton(new ChangeButton(new ItemSprite(ItemSpriteSheet.REDBOOK, null), "袖珍本",
+            "_-_ 新增了可以消耗1点充能自己阅读袖珍本，同时获得短时间的祝福效果\n"+
+            "_-_ 对袖珍本升级条件进行了补充说明，便于玩家理解并实现遗物升级"
+        ));
+       
+    changes = new ChangeInfo(Messages.get(ChangesScene.class, "changes"), false, null);
+		changes.hardlight( CharSprite.WARNING );
+		changeInfos.add(changes);
+
+        Image imageTemp = new Image(Assets.Sprites.TROLL, 0 ,0 ,12 ,21);
+        imageTemp.scale.x=0.8f;
+        imageTemp.scale.y=0.8f;
+        changes.addButton(new ChangeButton(imageTemp, "BUG修复", 
+            "_-_ 修复了点击排行榜导致存档损坏的BUG。\n"+
+			"_-_ 修复了AR15和M16A1对话文本错乱的BUG。\n"+
+			"_-_ 修复了移动端击败艾尔菲尔特可能出现崩溃的BUG。\n"
+        ));  
+
+        changes.addButton(new ChangeButton(new ItemSprite(ItemSpriteSheet.ARTIFACT_CHALICE1, null), "增压器",
+            "_-_ 对增压器进行下次充能需要多少能量供给增加了实时文本提示\n"+
+            "_-_ 现在不熟悉的游戏机制的玩家将不会因为贪增压器而Game Over了（大概）"
+        ));
+        
+    changes = new ChangeInfo(Messages.get(ChangesScene.class, "new"), false, null);
+		changes.hardlight( Window.TITLE_COLOR );
+		changeInfos.add(changes);
+
+        changes.addButton(new ChangeButton(new ItemSprite(ItemSpriteSheet.FOOD_POUCH, null), "野餐篮",
+            "_-_ 增加了野餐篮，用来专门存放食物类物品，同时优化pc端背包按钮显示\n"
+        ));
+
+        changes.addButton(new ChangeButton(new ItemSprite(ItemSpriteSheet.ARTIFACT_BEACON, null), "空降妖精",
+            "_-_ 重新加回了空降妖精，击败行裁者后将有12.5%的概率掉落"
+        ));    
+
+    changes = new ChangeInfo(Messages.get(ChangesScene.class, "nerfs"), false, null);
+		changes.hardlight( CharSprite.NEGATIVE );
+		changeInfos.add(changes);
+
+    Image gun561 = new Image(HeroSprite.avatar(HeroClass.TYPE561, 5));
+		gun561.scale.set(0.75f);
+        changes.addButton( new ChangeButton(gun561, "56-1式",
+            "_-_ 56-1式重新获得了在饥肠辘辘状态下力量-1的特性\n"+
+            "_-_ 该特性仅在角色力量大于12时生效"
+        ));
+        changes.addButton(new ChangeButton(new ItemSprite(ItemSpriteSheet.GLAIVE, null), "M99",
+            "_-_ 将_M99_的实际能力改为与描述文本相同，现在无法进行偷袭。"
+        ));
+    }    
+
+    public static void add_0_5_4_1_Changes( ArrayList<ChangeInfo> changeInfos ){
+        ChangeInfo changes = new ChangeInfo("v0.5.4.1", true, "");
+        changes.hardlight( Window.TITLE_COLOR );
+		changeInfos.add(changes);
+
+        changes = new ChangeInfo(Messages.get(ChangesScene.class, "new"), false, null);
+		changes.hardlight( Window.TITLE_COLOR );
+		changeInfos.add(changes);
+
+		changes.addButton( new ChangeButton(new ItemSprite(ItemSpriteSheet.GSH18,null), "新增游戏内容",
+			"_-_ 在测试模式加入了_地块编辑器_，虽然有些繁琐，但玩家可以自定义地形了。\n"+
+			"_-_ 将_【少女前线X罪恶装备/苍翼默示录】_相关联动内容作为彩蛋加入游戏，玩家在开启深入敌腹挑战后进行闯关即可体验！\n"+
+			"_-_ 增加了角色饱食度指示UI，现在角色的饱食度数值可视化了。\n"+
+			"_-_ FNC带着格里芬的补给来到了地牢！与其对话将能获取一些有趣的补给！\n"+
+			"_-_ 新增了一份节日彩蛋！\n"+
+			"_-_ 全新武器_GSh-18_加入。\n"
+		));
+
+		changes.addButton( new ChangeButton(new ItemSprite(ItemSpriteSheet.GREATAXE,null), "灵刀·樱吹雪",
+			"_-_ 灵刀·樱吹雪添加了新技能，使其不再只是一把‘刀’\n"
+		));
+
+		changes = new ChangeInfo(Messages.get(ChangesScene.class, "changes"), false, null);
+		changes.hardlight( CharSprite.WARNING );
+		changeInfos.add(changes);
+        
+        Image imageTemp = new Image(Assets.Sprites.TROLL, 0 ,0 ,12 ,21);
+        imageTemp.scale.x=0.8f;
+        imageTemp.scale.y=0.8f;
+        changes.addButton(new ChangeButton(imageTemp, "优化游戏体验",
+			"_-_ 修复了部分情况下新建游戏会闪退的BUG。\n"+
+			"_-_ 优化了_泛黄的袖珍本_，增强了其与其它遗物的相关性。\n"+
+			"_-_ 修复了第6大区_远处的井_贴图错误的BUG。\n"+
+			"_-_ 因为一些特殊目的，删除了_塌方陷阱_。\n"+
+			"_-_ 强化了_Type 56-2_武器榴弹的伤害。\n"+
+			"_-_ 修正了大量文本错误，对部分文本进行了优化。\n"
+        ));
+
+		Image tp = new Image(new TyphoonSprite.TyphoonSpriteRe());
+		tp.scale.set(PixelScene.align(0.30f));
+		changes.addButton( new ChangeButton(tp, "提丰",
+			"_-_ 将提丰的生成率改回了在全局28-29层中有1%刷新率，而不是之前的替换28-29楼层初始怪组%。\n"+
+			"_-_ 提丰现在在地牢中出现的频率会更高了。"
+        ));
+    }    
 
     public static void add_0_5_3_Changes( ArrayList<ChangeInfo> changeInfos ){
 		ChangeInfo changes = new ChangeInfo("v0.5.3", true, "");
@@ -93,7 +237,7 @@ public class v0_5_X_Changes {
 
 		changes.addButton(new ChangeButton(new Image(Assets.Sprites.SPINNER, 144, 0, 16, 16), Messages.get(ChangesScene.class, "bugfixes"),
 		"_-_ 现在鼠王护甲能正常使用了，561也可以使用鼠王护甲\n"+
-				"_-_ 修改了Ppsh-47的贴图\n"+
+				"_-_ 修改了Ppsh-41的贴图\n"+
 				"_-_ 更改了侦查中枢的显示偏移，现在视觉上不会阻挡其他怪物了\n"+
 				"_-_ 修复了G11 虹卫，镜像 攻击崩溃的bug\n"+
 				"_-_ 修复了骷髅文本错误问题\n"+

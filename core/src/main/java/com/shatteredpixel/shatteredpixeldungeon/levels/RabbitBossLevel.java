@@ -38,6 +38,7 @@ import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Plant;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.utils.BArray;
+import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.Group;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.Bundlable;
@@ -62,7 +63,7 @@ public class RabbitBossLevel extends Level {
 	}
 	
 	private State state;
-	private Elphelt elphelt;
+	private Elphelt elphelt=null;
 
 	//keep track of that need to be removed as the level is changed. We dump 'em back into the level at the end.
 	private ArrayList<Item> storedItems = new ArrayList<>();
@@ -78,14 +79,12 @@ public class RabbitBossLevel extends Level {
 	}
 	
 	private static final String STATE	        = "state";
-	private static final String ELPHELT	        = "elphelt";
 	private static final String STORED_ITEMS    = "storeditems";
 	
 	@Override
 	public void storeInBundle( Bundle bundle ) {
 		super.storeInBundle(bundle);
 		bundle.put( STATE, state );
-		bundle.put( ELPHELT, elphelt );
 		bundle.put( STORED_ITEMS, storedItems);
 	}
 	
@@ -94,10 +93,7 @@ public class RabbitBossLevel extends Level {
 		super.restoreFromBundle(bundle);
 		state = bundle.getEnum( STATE, State.class );
 
-		//in some states elphelt won't be in the world, in others she will be.
-		if (state != State.WON) {
-			elphelt = (Elphelt)bundle.get( ELPHELT );
-		} else {
+		if (state!=State.READY&&state!=State.WON) {
 			for (Mob mob : mobs){
 				if (mob instanceof Elphelt) {
 					elphelt = (Elphelt) mob;
@@ -137,7 +133,6 @@ public class RabbitBossLevel extends Level {
 	
 	@Override
 	protected void createMobs() {
-		elphelt = new Elphelt(); //We want to keep track of elphelt independently of other mobs, he's not always in the level.
 	}
 	
 	public Actor respawner() {
@@ -158,10 +153,14 @@ public class RabbitBossLevel extends Level {
 	}
 
 	@Override
-	public void seal( ) {
-		super.seal();
-		if (state == State.READY) {
-			progress();
+	public void occupyCell(Char ch) {
+		super.occupyCell(ch);
+
+		if (ch == Dungeon.hero) {
+			//hero enters tengu's chamber
+			if (state == State.READY) {
+				progress();
+			}
 		}
 	}
 
@@ -252,7 +251,8 @@ public class RabbitBossLevel extends Level {
 		switch (state){
 			//moving to the beginning of the fight
 			case READY:
-
+				seal();
+				elphelt = new Elphelt();
 				elphelt.state = elphelt.SLEEPING;
 				elphelt.pos = exit; //in the middle of the fight room
 
@@ -266,7 +266,6 @@ public class RabbitBossLevel extends Level {
 
 			//halfway through, move to the maze
 			case PHASE1:
-
 				GameScene.flash(0xFFFFFF);
 				Sample.INSTANCE.play(Assets.Sounds.BLAST);
 
@@ -275,7 +274,6 @@ public class RabbitBossLevel extends Level {
 				break;
 
 			case PHASE2:
-
 				GameScene.flash(0xFFFFFF);
 				Sample.INSTANCE.play(Assets.Sounds.BLAST);
 
@@ -302,7 +300,7 @@ public class RabbitBossLevel extends Level {
 	@Override
 	public Group addVisuals() {
 		super.addVisuals();
-		RabbitLevel.addPrisonVisuals(this, visuals);
+		PrisonLevel.addPrisonVisuals(this,visuals);
 		return visuals;
 	}
 
@@ -335,7 +333,7 @@ public class RabbitBossLevel extends Level {
 					W, e, e, e, e, W, e, e, e, e, W, e, e, e, e, e, e, e, e, e, e, e, e, e, e, W, e, e, e, e, W, W,
 					W, W, W, W, W, e, e, e, W, e, e, W, e, e, W, W, W, e, e, e, e, W, W, e, e, e, W, W, W, W, W, W,
 					W, e, e, e, e, e, e, W, e, e, e, e, e, W, e, e, e, W, e, e, W, e, e, W, e, e, e, e, e, e, W, W,
-					W, e, e, e, e, e, W, e, e, e, e, e, e, W, e, E, e, e, e, e, e, e, e, e, W, e, e, e, e, e, W, W,
+					W, e, e, e, e, e, W, e, e, e, e, e, e, W, e, e, e, e, e, e, e, e, e, e, W, e, e, e, e, e, W, W,
 					W, e, W, W, e, e, W, e, e, e, e, W, e, e, W, e, e, e, W, W, e, e, e, e, W, e, e, W, e, e, W, W,
 					W, W, e, e, W, e, W, e, e, e, W, e, e, e, e, e, e, W, e, e, W, e, e, e, W, e, W, e, e, e, W, W,
 					W, e, e, e, W, e, W, e, e, e, W, e, e, e, e, M, e, e, e, e, W, e, e, e, W, e, W, e, e, e, W, W,

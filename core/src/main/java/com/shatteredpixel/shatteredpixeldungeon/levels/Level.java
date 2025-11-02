@@ -72,6 +72,7 @@ import com.shatteredpixel.shatteredpixeldungeon.levels.features.Door;
 import com.shatteredpixel.shatteredpixeldungeon.levels.features.HighGrass;
 import com.shatteredpixel.shatteredpixeldungeon.levels.painters.Painter;
 import com.shatteredpixel.shatteredpixeldungeon.levels.traps.Trap;
+import com.shatteredpixel.shatteredpixeldungeon.levels.triggers.Trigger;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.ShadowCaster;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Plant;
@@ -117,6 +118,8 @@ public abstract class Level implements Bundlable {
 	
 	protected static final float TIME_TO_RESPAWN	= 50;
 
+	public int levelDepth;
+	public int levelId;
 	public int version;
 	
 	public int[] map;
@@ -152,6 +155,7 @@ public abstract class Level implements Bundlable {
 	public HashMap<Class<? extends Blob>,Blob> blobs;
 	public SparseArray<Plant> plants;
 	public SparseArray<Trap> traps;
+	public SparseArray<Trigger> triggers;
 	public HashSet<CustomTilemap> customTiles;
 	public HashSet<CustomTilemap> customWalls;
 	
@@ -163,6 +167,8 @@ public abstract class Level implements Bundlable {
 	public int color1 = 0x004400;
 	public int color2 = 0x88CC44;
 
+	private static final String LEVEL_DEPTH = "levelDepth";
+	private static final String LEVEL_ID    = "levelId";
 	private static final String VERSION     = "version";
 	private static final String WIDTH       = "width";
 	private static final String HEIGHT      = "height";
@@ -175,14 +181,16 @@ public abstract class Level implements Bundlable {
 	private static final String HEAPS		= "heaps";
 	private static final String PLANTS		= "plants";
 	private static final String TRAPS       = "traps";
+	private static final String TRIGGERS    = "triggers";
 	private static final String CUSTOM_TILES= "customTiles";
 	private static final String CUSTOM_WALLS= "customWalls";
 	private static final String MOBS		= "mobs";
 	private static final String BLOBS		= "blobs";
 	private static final String FEELING		= "feeling";
 
-	public void create() {
-
+	public void create(int levelDepth,int levelId){
+		this.levelDepth=levelDepth;
+		this.levelId   =levelId;
 		Random.pushGenerator( Dungeon.seedCurDepth() );
 		
 		if (!(Dungeon.bossLevel())) {
@@ -261,6 +269,7 @@ public abstract class Level implements Bundlable {
 			blobs = new HashMap<>();
 			plants = new SparseArray<>();
 			traps = new SparseArray<>();
+			triggers = new SparseArray<>();
 			customTiles = new HashSet<>();
 			customWalls = new HashSet<>();
 			
@@ -319,8 +328,9 @@ public abstract class Level implements Bundlable {
 	
 	@Override
 	public void restoreFromBundle( Bundle bundle ) {
-
-		version = bundle.getInt( VERSION );
+		levelDepth=bundle.getInt(LEVEL_DEPTH);
+		levelId   =bundle.getInt(LEVEL_ID   );
+		version   =bundle.getInt(VERSION    );
 		
 		//saves from before v0.9.2b are not supported
 		if (version < GirlsFrontlinePixelDungeon.v0_9_2b){
@@ -334,6 +344,7 @@ public abstract class Level implements Bundlable {
 		blobs = new HashMap<>();
 		plants = new SparseArray<>();
 		traps = new SparseArray<>();
+		triggers = new SparseArray<>();
 		customTiles = new HashSet<>();
 		customWalls = new HashSet<>();
 		
@@ -364,6 +375,12 @@ public abstract class Level implements Bundlable {
 		for (Bundlable p : collection) {
 			Trap trap = (Trap)p;
 			traps.put( trap.pos, trap );
+		}
+
+		collection = bundle.getCollection( TRIGGERS );
+		for (Bundlable p : collection) {
+			Trigger trigger = (Trigger)p;
+			triggers.put( trigger.pos, trigger );
 		}
 
 		collection = bundle.getCollection( CUSTOM_TILES );
@@ -412,25 +429,28 @@ public abstract class Level implements Bundlable {
 	
 	@Override
 	public void storeInBundle( Bundle bundle ) {
-		bundle.put( VERSION, Game.versionCode );
-		bundle.put( WIDTH, width );
-		bundle.put( HEIGHT, height );
-		bundle.put( MAP, map );
-		bundle.put( VISITED, visited );
-		bundle.put( MAPPED, mapped );
-		bundle.put( ENTRANCE, entrance );
-		bundle.put( EXIT, exit );
-		bundle.put( LOCKED, locked );
-		bundle.put( HEAPS, heaps.valueList() );
-		bundle.put( PLANTS, plants.valueList() );
-		bundle.put( TRAPS, traps.valueList() );
-		bundle.put( CUSTOM_TILES, customTiles );
-		bundle.put( CUSTOM_WALLS, customWalls );
-		bundle.put( MOBS, mobs );
-		bundle.put( BLOBS, blobs.values() );
-		bundle.put( FEELING, feeling );
-		bundle.put( "mobs_to_spawn", mobsToSpawn.toArray(new Class[0]));
-		bundle.put( "respawner", respawner );
+		bundle.put(LEVEL_DEPTH,levelDepth);
+		bundle.put(LEVEL_ID,levelId);
+		bundle.put(VERSION, Game.versionCode );
+		bundle.put(WIDTH, width );
+		bundle.put(HEIGHT, height );
+		bundle.put(MAP, map );
+		bundle.put(VISITED, visited );
+		bundle.put(MAPPED, mapped );
+		bundle.put(ENTRANCE, entrance );
+		bundle.put(EXIT, exit );
+		bundle.put(LOCKED, locked );
+		bundle.put(HEAPS, heaps.valueList() );
+		bundle.put(PLANTS, plants.valueList() );
+		bundle.put(TRAPS, traps.valueList() );
+		bundle.put(TRIGGERS, triggers.valueList() );
+		bundle.put(CUSTOM_TILES, customTiles );
+		bundle.put(CUSTOM_WALLS, customWalls );
+		bundle.put(MOBS, mobs );
+		bundle.put(BLOBS, blobs.values() );
+		bundle.put(FEELING, feeling );
+		bundle.put("mobs_to_spawn", mobsToSpawn.toArray(new Class[0]));
+		bundle.put("respawner", respawner );
 	}
 	
 	public int tunnelTile() {
@@ -746,6 +766,23 @@ public abstract class Level implements Bundlable {
 			discoverable[i] = d;
 		}
 	}
+
+	public void cleanWalls(int cell){
+		for (int i=0; i < PathFinder.NEIGHBOURS9.length; i++) {
+			int cellAndAround=cell+PathFinder.NEIGHBOURS9[i];
+
+			boolean d = false;
+			for (int j=0; j < PathFinder.NEIGHBOURS9.length; j++) {
+				int n = cellAndAround + PathFinder.NEIGHBOURS9[j];
+				if (n >= 0 && n < length && map[n] != Terrain.WALL && map[n] != Terrain.WALL_DECO) {
+					d = true;
+					break;
+				}
+			}
+			
+			discoverable[cellAndAround]=d;
+		}
+	}
 	
 	public static void set( int cell, int terrain ){
 		set( cell, terrain, Dungeon.level );
@@ -833,6 +870,14 @@ public abstract class Level implements Bundlable {
 		return heap;
 	}
 	
+	public void placeTrigger(Trigger trigger){
+		triggers.put(trigger.pos,trigger);
+	}
+
+	public void removeTrigger(Trigger trigger){
+		triggers.remove(trigger.pos);
+	}
+
 	public Plant plant( Plant.Seed seed, int pos ) {
 		
 		if (Dungeon.isChallenged(Challenges.NO_HERBALISM)){
@@ -944,6 +989,9 @@ public abstract class Level implements Bundlable {
 	}
 	
 	public void occupyCell( Char ch ){
+		Trigger trigger=triggers.get(ch.pos);
+		if(null!=trigger && trigger.canBePressed()){trigger.activate(ch);}
+
 		if (!ch.isImmune(Web.class) && Blob.volumeAt(ch.pos, Web.class) > 0){
 			blobs.get(Web.class).clear(ch.pos);
 			Web.affectChar( ch );
@@ -1265,11 +1313,11 @@ public abstract class Level implements Bundlable {
 		int by = b / width();
 		return Math.max( Math.abs( ax - bx ), Math.abs( ay - by ) );
 	}
-	
+
 	public boolean adjacent( int a, int b ) {
 		return distance( a, b ) == 1;
 	}
-	
+
 	//uses pythagorean theorum for true distance, as if there was no movement grid
 	public float trueDistance(int a, int b){
 		int ax = a % width();

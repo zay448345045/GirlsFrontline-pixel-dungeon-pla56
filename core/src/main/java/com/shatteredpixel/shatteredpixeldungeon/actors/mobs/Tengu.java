@@ -210,8 +210,7 @@ public class Tengu extends Mob {
 		GameScene.bossSlain();
 		super.die( cause );
 		Badges.KILL_SNAKE();
-		Badges.validateType561Unlock();
-		Badges.validateBossSlain();
+		Badges.validateBossSlain(Badges.Badge.BOSS_SLAIN_2);;
 		
 		LloydsBeacon beacon = Dungeon.hero.belongings.getItem(LloydsBeacon.class);
 		if (beacon != null) {
@@ -326,7 +325,7 @@ public class Tengu extends Mob {
 				Game.runOnRenderThread(new Callback() {
 					@Override
 					public void call() {
-						GameScene.scene.add(new WndDialog(new Uroboros_Plot(),false));
+						GameScene.scene.add(new WndDialog(new Uroboros_Plot()));
 					}
 				});
 			}
@@ -607,7 +606,7 @@ public class Tengu extends Mob {
 					if (PathFinder.distance[cell] < Integer.MAX_VALUE) {
 						Char ch = Actor.findChar(cell);
 						if (ch != null && !(ch instanceof Tengu)) {
-							int dmg = Random.NormalIntRange(5 + Dungeon.depth, 10 + Dungeon.depth * 2);
+							int dmg = Random.NormalIntRange(5 + Dungeon.curDepth(), 10 + Dungeon.curDepth() * 2);
 							dmg -= ch.drRoll();
 
 							if (dmg > 0) {
@@ -1021,7 +1020,7 @@ public class Tengu extends Mob {
 							
 							Char ch = Actor.findChar(cell);
 							if (ch != null && !(ch instanceof Tengu)){
-								ch.damage(2 + Dungeon.depth, new Electricity());
+								ch.damage(2 + Dungeon.curDepth(), new Electricity());
 								
 								if (ch == Dungeon.hero && !ch.isAlive()) {
 									Dungeon.fail(Tengu.class);

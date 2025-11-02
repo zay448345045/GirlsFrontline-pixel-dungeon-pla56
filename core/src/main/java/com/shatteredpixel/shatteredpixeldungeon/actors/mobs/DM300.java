@@ -353,7 +353,7 @@ public class DM300 extends Mob {
 			Game.runOnRenderThread(new Callback() {
 				@Override
 				public void call() {
-					GameScene.scene.add(new WndDialog(new Gager_Plot(),false));
+					GameScene.scene.add(new WndDialog(new Gager_Plot()));
 				}
 			});
 
@@ -545,7 +545,7 @@ public class DM300 extends Mob {
 			Dungeon.level.drop( new MetalShard(), pos + ofs ).sprite.drop( pos );
 		}
 
-		Badges.validateBossSlain();
+		Badges.validateBossSlain(Badges.Badge.BOSS_SLAIN_3);
 
 		LloydsBeacon beacon = Dungeon.hero.belongings.getItem(LloydsBeacon.class);
 		if (beacon != null) {

@@ -199,7 +199,6 @@ public class ItemSpriteSheet {
 	                                                                                    //16 free slots
 
 	private static final int WEP_TIER1      =                               xy(1, 7);   //8 slots
-	/** SP1 贴图 */
 	public static final int UMP45         	= WEP_TIER1+0;
 	public static final int DP             	= WEP_TIER1+1;
 	public static final int M9   			= WEP_TIER1+2;
@@ -224,23 +223,16 @@ public class ItemSpriteSheet {
 		assignItemRect(THUNDER,   16, 16);
 	}
 
-	private static final int WEP_TIER2      =                               xy(1, 8);   //8 slots
-	public static final int SHORTSWORD      = WEP_TIER2+10;
-	public static final int HAND_AXE        = WEP_TIER2+11;
-	public static final int SPEAR           = WEP_TIER2+12;
-	public static final int QUARTERSTAFF    = WEP_TIER2+13;
-	public static final int DIRK            = WEP_TIER2+14;
-
-	/** SP2 贴图 */
-	public static final int M16      = WEP_TIER2+0;
-	public static final int M1911        = WEP_TIER2+1;
-	public static final int M1903           = WEP_TIER2+2;
-	public static final int M1A1    = WEP_TIER2+3;
-	public static final int NAGANTREVOLVER      = WEP_TIER2+4;
+	private static final int WEP_TIER2     = xy(1, 8);   //8 slots
+	public static final int M16            = WEP_TIER2+0;
+	public static final int M1911          = WEP_TIER2+1;
+	public static final int M1903          = WEP_TIER2+2;
+	public static final int M1A1           = WEP_TIER2+3;
+	public static final int NAGANTREVOLVER = WEP_TIER2+4;
 	public static final int G36            = WEP_TIER2+5;
-	public static final int TRAVAILLER           = WEP_TIER2+6;
-	public static final int CONFIRE          = WEP_TIER2+7;
-	public static final int MAGNUMWEDDING	 = WEP_TIER2+8;
+	public static final int TRAVAILLER     = WEP_TIER2+6;
+	public static final int CONFIRE        = WEP_TIER2+7;
+	public static final int MAGNUMWEDDING  = WEP_TIER2+8;
 	static{
 		assignItemRect(M16,					15, 16);
 		assignItemRect(M1911,				12, 14);
@@ -253,22 +245,14 @@ public class ItemSpriteSheet {
 		assignItemRect(MAGNUMWEDDING,		12, 12);
 	}
 
-	private static final int WEP_TIER3      =                               xy(9, 8);   //8 slots
-	public static final int SWORD           = WEP_TIER3+10;
-	public static final int MACE            = WEP_TIER3+11;
-	public static final int SCIMITAR        = WEP_TIER3+12;
-	public static final int ROUND_SHIELD    = WEP_TIER3+13;
-	public static final int SAI             = WEP_TIER3+14;
-	public static final int WHIP            = WEP_TIER3+15;
-
-	/** SP3 贴图 */
-	public static final int KS23           = WEP_TIER3+0;
-	public static final int KAR98            = WEP_TIER3+1;
-	public static final int NEGEV        = WEP_TIER3+2;
-	public static final int MOS    = WEP_TIER3+3;
-	public static final int KRISS             = WEP_TIER3+4;
-	public static final int WA            = WEP_TIER3+5;
-	public static final int C96            = WEP_TIER3+6;
+	private static final int WEP_TIER3 = xy(10, 8);   //8 slots
+	public static final int KS23       = WEP_TIER3+0;
+	public static final int KAR98      = WEP_TIER3+1;
+	public static final int NEGEV      = WEP_TIER3+2;
+	public static final int MOS        = WEP_TIER3+3;
+	public static final int KRISS      = WEP_TIER3+4;
+	public static final int WA         = WEP_TIER3+5;
+	public static final int C96        = WEP_TIER3+6;
 
 	static{
 		assignItemRect(KS23,           16, 16);
@@ -281,13 +265,6 @@ public class ItemSpriteSheet {
 	}
 
 	private static final int WEP_TIER4      =                               xy(9, 9);   //8 slots
-	public static final int LONGSWORD       = WEP_TIER4+10;
-	public static final int BATTLE_AXE      = WEP_TIER4+11;
-	public static final int FLAIL           = WEP_TIER4+12;
-	public static final int RUNIC_BLADE     = WEP_TIER4+13;
-	public static final int ASSASSINS_BLADE = WEP_TIER4+14;
-
-	/** SP4 贴图 */
 	public static final int WIN97      		= WEP_TIER4+0;
 	public static final int DRAGUNOV      	= WEP_TIER4+1;
 	public static final int AK47         	= WEP_TIER4+2;
@@ -295,6 +272,7 @@ public class ItemSpriteSheet {
 	public static final int GUA91 			= WEP_TIER4+4;
 	public static final int AWP             = WEP_TIER4+5;
 	public static final int CROSSBOW        = WEP_TIER4+6;
+	public static final int AN94            = WEP_TIER4+7;
 
 	static{
 		assignItemRect(WIN97,       15, 15);
@@ -304,21 +282,17 @@ public class ItemSpriteSheet {
 		assignItemRect(GUA91, 14, 15);
 		assignItemRect(AWP,               16, 18);
 		assignItemRect(CROSSBOW,        16, 18);
+		assignItemRect(AN94,        16, 18);
 	}
 
-	/** SP5 贴图 */
 	private static final int WEP_TIER5      =                               xy(1, 9);   //8 slots
-	public static final int GREATSWORD      = WEP_TIER5+10;
-	public static final int WAR_HAMMER      = WEP_TIER5+11;
-	public static final int GAUNTLETS       = WEP_TIER5+15;
-
 	//TODO SP5 贴图需要调整
 	public static final int USAS12      = WEP_TIER5+0;
-	public static final int SASS      = WEP_TIER5+1;
-	public static final int GLAIVE          = WEP_TIER5+2;
-	public static final int GREATAXE        = WEP_TIER5+3;
-	public static final int GREATSHIELD     = WEP_TIER5+4;
-	public static final int LAR              = WEP_TIER5+5;
+	public static final int SASS        = WEP_TIER5+1;
+	public static final int GLAIVE      = WEP_TIER5+2;
+	public static final int GREATAXE    = WEP_TIER5+3;
+	public static final int GREATSHIELD = WEP_TIER5+4;
+	public static final int LAR         = WEP_TIER5+5;
 	static{
 		assignItemRect(USAS12,  16, 16);
 		assignItemRect(SASS,  16, 16);
@@ -335,12 +309,16 @@ public class ItemSpriteSheet {
 	public static final int NAGANT			= WEP_TIER6+2;
 	public static final int NTW20			= WEP_TIER6+3;
 	public static final int GROZA            = WEP_TIER6+5;
+	public static final int MOSINNAGANT			= WEP_TIER6+6;
+	public static final int cz75axe			= WEP_TIER6+7;
 	static{
 		assignItemRect(GROZA,     16, 17);
 		assignItemRect(MG42,     16, 17);
 		assignItemRect(SAIGA,     16, 17);
 		assignItemRect(NAGANT,     16, 17);
 		assignItemRect(NTW20,     19, 19);
+			assignItemRect(MOSINNAGANT,     16, 17);
+			assignItemRect(cz75axe,     14, 14);
 	}
 
 
@@ -363,6 +341,7 @@ public class ItemSpriteSheet {
 			assignItemRect(i, 15, 15);
 	}
 	
+	//这是护甲行别找不到对应的贴图，所以这里先注释掉
 	private static final int ARMOR          =                               xy(1, 12);  //16 slots
 	public static final int ARMOR_CLOTH     = ARMOR+0;
 	public static final int ARMOR_LEATHER   = ARMOR+1;
@@ -380,11 +359,11 @@ public class ItemSpriteSheet {
 		assignItemRect(ARMOR_MAIL,      14, 12);
 		assignItemRect(ARMOR_SCALE,     14, 11);
 		assignItemRect(ARMOR_PLATE,     12, 12);
-		assignItemRect(ARMOR_WARRIOR,   12, 12);
-		assignItemRect(ARMOR_MAGE,      15, 15);
-		assignItemRect(ARMOR_ROGUE,     14, 12);
-		assignItemRect(ARMOR_HUNTRESS,  13, 15);
-		assignItemRect(ARMOR_TYPE561,   16, 14);
+		assignItemRect(ARMOR_WARRIOR,   16, 16);
+		assignItemRect(ARMOR_MAGE,      16, 16);
+		assignItemRect(ARMOR_ROGUE,     16, 16);
+		assignItemRect(ARMOR_HUNTRESS,  16, 16);
+		assignItemRect(ARMOR_TYPE561,   16, 16);
 	}
 
 	                                                                                    //16 free slots
@@ -407,7 +386,7 @@ public class ItemSpriteSheet {
 	//TODO 贴图需要优化
 	public static final int M79                   = WANDS+13;
 	public static final int M84                   = WANDS+14;
-
+	public static final int WAND_DISINTEGRATION2  = WANDS+15;
 	static {
 		for (int i = WANDS; i < WANDS+16; i++)
 			assignItemRect(i, 14, 14);
@@ -455,6 +434,12 @@ public class ItemSpriteSheet {
 	public static final int ARTIFACT_ROSE1      = ARTIFACTS+20;
 	public static final int ARTIFACT_ROSE2      = ARTIFACTS+21;
 	public static final int ARTIFACT_ROSE3      = ARTIFACTS+22;
+	public static final int ARTIFACT_UNKNOWN    = ARTIFACTS+23;
+	public static final int ARTIFACT_UNKNOWN2   = ARTIFACTS+24;
+	public static final int ARTIFACT_UNKNOWN3   = ARTIFACTS+25;
+	public static final int REDBOOK             = ARTIFACTS+26;
+	public static final int REDBOOK2            = ARTIFACTS+27;
+	public static final int REDBOOK3            = ARTIFACTS+28;
 	static{
 		assignItemRect(ARTIFACT_CLOAK,      16,  14);
 		assignItemRect(ARTIFACT_ARMBAND,    16, 13);
@@ -479,6 +464,9 @@ public class ItemSpriteSheet {
 		assignItemRect(ARTIFACT_ROSE1,      14, 14);
 		assignItemRect(ARTIFACT_ROSE2,      14, 14);
 		assignItemRect(ARTIFACT_ROSE3,      14, 14);
+		assignItemRect(REDBOOK,             13, 16);
+		assignItemRect(REDBOOK2,            13, 16);
+		assignItemRect(REDBOOK3,            13, 16);
 	}
 
 	                                                                                    //16 free slots
@@ -619,7 +607,7 @@ public class ItemSpriteSheet {
 			assignItemRect(i, 12, 14);
 	}
 	
-	private static final int SPELLS         =                               xy(1, 27);  //16 slots
+	private static final int SPELLS         = xy(1, 27);  //16 slots
 	public static final int MAGIC_PORTER    = SPELLS+0;
 	public static final int PHASE_SHIFT     = SPELLS+1;
 	public static final int TELE_GRAB       = SPELLS+2;
@@ -653,42 +641,48 @@ public class ItemSpriteSheet {
 		assignItemRect(RECYCLE,         10, 15);
 	}
 	
-	private static final int FOOD       = xy(1, 28);  //16 slots
-	public static final int MEAT        = FOOD+0;
-	public static final int STEAK       = FOOD+1;
-	public static final int STEWED      = FOOD+2;
-	public static final int OVERPRICED  = FOOD+3;
-	public static final int CARPACCIO   = FOOD+4;
-	public static final int RATION      = FOOD+5;
-	public static final int PASTY       = FOOD+6;
-	public static final int PUMPKIN_PIE = FOOD+7;
-	public static final int CANDY_CANE  = FOOD+8;
-	public static final int MEAT_PIE    = FOOD+9;
-	public static final int BLANDFRUIT  = FOOD+10;
-	public static final int BLAND_CHUNKS= FOOD+11;
-	public static final int BERRY 		= FOOD+12;
-	public static final int MACCOL      = FOOD+13;
-	public static final int CINNAMONROLL= FOOD+14;
-	public static final int SUGARZONGZI = FOOD+27;
-	public static final int SALTYZONGZI = FOOD+28;
+	private static final int FOOD         = xy(1, 28);  //16 slots
+	public static final int MEAT          = FOOD+0;
+	public static final int STEAK         = FOOD+1;
+	public static final int STEWED        = FOOD+2;
+	public static final int OVERPRICED    = FOOD+3;
+	public static final int CARPACCIO     = FOOD+4;
+	public static final int RATION        = FOOD+5;
+	public static final int PASTY         = FOOD+6;
+	public static final int PUMPKIN_PIE   = FOOD+7;
+	public static final int CANDY_CANE    = FOOD+8;
+	public static final int MEAT_PIE      = FOOD+9;
+	public static final int BLANDFRUIT    = FOOD+10;
+	public static final int BLAND_CHUNKS  = FOOD+11;
+	public static final int BERRY 		  = FOOD+12;
+	public static final int MACCOL        = FOOD+13;
+	public static final int CINNAMONROLL  = FOOD+14;
+	public static final int SUGARZONGZI   = FOOD+27;
+	public static final int SALTYZONGZI   = FOOD+28;
+	public static final int CHOCO         = FOOD+29;
+	public static final int NUTSMOONCAKE  = FOOD+30;
+	public static final int SALTYMOONCAKE = FOOD+31;
 	static{
-		assignItemRect(MEAT,        15,11);
-		assignItemRect(STEAK,       15,11);
-		assignItemRect(OVERPRICED,  15,14);
-		assignItemRect(CARPACCIO,   15,11);
-		assignItemRect(BLANDFRUIT,  9, 12);
-		assignItemRect(RATION,      16,13);
-		assignItemRect(PASTY,       16,11);
-		assignItemRect(PUMPKIN_PIE, 16,12);
-		assignItemRect(CANDY_CANE,  13,16);
-		assignItemRect(MEAT_PIE,    16,11);
-		assignItemRect(BLANDFRUIT,  9, 12);
-		assignItemRect(BLAND_CHUNKS,14,6);
-		assignItemRect(BERRY,       9, 11);
-		assignItemRect(MACCOL,       7,10);
-		assignItemRect(CINNAMONROLL, 8,8 );
-		assignItemRect(SUGARZONGZI ,16,14);
-		assignItemRect(SALTYZONGZI ,16,15);
+		assignItemRect(MEAT,         15,11);
+		assignItemRect(STEAK,        15,11);
+		assignItemRect(OVERPRICED,   15,14);
+		assignItemRect(CARPACCIO,    15,11);
+		assignItemRect(BLANDFRUIT,    9,12);
+		assignItemRect(RATION,       16,13);
+		assignItemRect(PASTY,        16,11);
+		assignItemRect(PUMPKIN_PIE,  16,12);
+		assignItemRect(CANDY_CANE,   13,16);
+		assignItemRect(MEAT_PIE,     16,11);
+		assignItemRect(BLANDFRUIT,    9,12);
+		assignItemRect(BLAND_CHUNKS, 14, 6);
+		assignItemRect(BERRY,         9,11);
+		assignItemRect(MACCOL,        7,10);
+		assignItemRect(CINNAMONROLL,  8, 8);
+		assignItemRect(SUGARZONGZI , 16,14);
+		assignItemRect(SALTYZONGZI , 16,15);
+		assignItemRect(CHOCO,        16,15);
+		assignItemRect(NUTSMOONCAKE, 14,13);
+		assignItemRect(SALTYMOONCAKE,16,15);
 	}
 
 	private static final int QUEST  =                                       xy(1, 29);  //32 slots
@@ -721,6 +715,10 @@ public class ItemSpriteSheet {
 	public static final int BANDOLIER   = BAGS+4;
 	public static final int HOLSTER     = BAGS+5;
 	public static final int VIAL        = BAGS+6;
+	public static final int WATER_POUCH = BAGS+7;
+	public static final int FOOD_POUCH  = BAGS+8;
+	public static final int CHESTHANGIN = BAGS+9;
+	public static final int TACBACKPACK = BAGS+10;
 	static{
 		assignItemRect(WATERSKIN,   12, 12);
 		assignItemRect(BACKPACK,    16, 16);
@@ -729,6 +727,10 @@ public class ItemSpriteSheet {
 		assignItemRect(BANDOLIER,   15, 16);
 		assignItemRect(HOLSTER,     15, 16);
 		assignItemRect(VIAL,        12, 12);
+		assignItemRect(WATER_POUCH, 16, 14);
+		assignItemRect(FOOD_POUCH,  16, 16);
+		assignItemRect(CHESTHANGIN, 16, 16);
+		assignItemRect(TACBACKPACK, 16, 16);
 	}
 
 	//8 free slots
@@ -779,17 +781,19 @@ public class ItemSpriteSheet {
 		assignItemRect(THROWING_HAMMER, 12, 12);
 		assignItemRect(FORCE_CUBE,      11, 12);
 	}
-
+	//这是新添加的武器行，别找不到对应的贴图，所以这里先注释一下
 	private static final int GUN561_NUKE      =xy(1, 38);
 	public static final  int GUN561           =GUN561_NUKE+2;
 	public static final  int GUN562    	      =GUN561_NUKE+3;
 	public static final  int GUN562ACCESSORIES=GUN561_NUKE+4;
-	public static final  int REDBOOK          =GUN561_NUKE+5;
+	public static final  int GSH18           =GUN561_NUKE+5;
+	public static final  int GUN64           =GUN561_NUKE+7;
 	static {
 		assignItemRect(GUN561,            14, 16);
 		assignItemRect(GUN562,            16, 15);
 		assignItemRect(GUN562ACCESSORIES, 16, 15);
-		assignItemRect(REDBOOK,           13, 16);
+		assignItemRect(GSH18,             16, 16);
+		assignItemRect(GUN64,             12, 16);
 	}                                                               //16 free slots
 
 	//for smaller 8x8 icons that often accompany an item sprite

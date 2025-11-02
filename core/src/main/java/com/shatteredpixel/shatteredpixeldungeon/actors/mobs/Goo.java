@@ -48,7 +48,7 @@ import com.watabou.utils.Bundle;
 import com.watabou.utils.Callback;
 import com.watabou.utils.PathFinder;
 import com.watabou.utils.Random;
-
+import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.LloydsBeacon;
 public class Goo extends Mob {
 
 	{
@@ -258,7 +258,7 @@ public class Goo extends Mob {
 
 		Badges.KILL_EXCUTION();
 		
-		//60% chance of 2 blobs, 30% chance of 3, 10% chance for 4. Average of 2.5
+		// 60% chance of 2 blobs, 30% chance of 3, 10% chance for 4. Average of 2.5
 		int blobs = Random.chances(new float[]{0, 0, 6, 3, 1});
 		for (int i = 0; i < blobs; i++){
 			int ofs;
@@ -268,7 +268,12 @@ public class Goo extends Mob {
 			Dungeon.level.drop( new GooBlob(), pos + ofs ).sprite.drop( pos );
 		}
 		
-		Badges.validateBossSlain();
+		// 添加12.5%概率掉落LloydsBeacon
+		if (Random.Float() < 0.125f) {
+			Dungeon.level.drop( new LloydsBeacon(), pos ).sprite.drop();
+		}
+		
+		Badges.validateBossSlain(Badges.Badge.BOSS_SLAIN_1);
 		
 		yell( Messages.get(this, "defeated") );
 	}
@@ -283,7 +288,7 @@ public class Goo extends Mob {
 			Game.runOnRenderThread(new Callback() {
 				@Override
 				public void call() {
-					GameScene.scene.add(new WndDialog(new Excutioner_Plot(),false));
+					GameScene.scene.add(new WndDialog(new Excutioner_Plot()));
 				}
 			});
 

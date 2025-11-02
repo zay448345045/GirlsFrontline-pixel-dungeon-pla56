@@ -22,7 +22,8 @@
 package com.shatteredpixel.shatteredpixeldungeon.ui;
 
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
-import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
+
+import com.shatteredpixel.shatteredpixeldungeon.scenes.TitleScene;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndKeyBindings;
 import com.watabou.input.GameAction;
 import com.watabou.noosa.Game;
@@ -38,7 +39,11 @@ public class ExitButton extends IconButton {
 
 	@Override
 	protected void onClick() {
-		Game.switchScene(GameScene.class );
+		if (Game.scene() instanceof TitleScene) {
+			Game.instance.finish();
+		} else {
+			Game.switchScene(TitleScene.class );
+		}
 	}
 
 	@Override

@@ -27,11 +27,8 @@ public class Assets {
 	public static final String TOW 			= "tow.png";
 
 	//need Organize
-	public static final String SAVESLOT		= "new_ui.png";
-	public static final String PORTRAIT1	= "portrait1.png";
 	public static final String EMOTION 		= "emotion.png";
 	public static final String PYRO			= "sprites/girlpd/pyro.png";
-	public static final String NOEL			= "noel.png";
 	public static final String P7			= "p7.png";
 	public static final String SVESPID		= "shieldvespid.png";
 	public static final String M4A1			= "m4a1.png";
@@ -43,9 +40,9 @@ public class Assets {
 	public static final String INTRUDER 	= "intruder.png";
 
 	//need Organize
-	public static final String ELPHELT 		= "sprites/Elphelt.png";
+	public static final String ELPHELT 		= "sprites/boss/elphelt.png";
 	public static final String DRAGUN		= "sprites/dragun.png";
-	public static final String DISLOLI		= "sprites/disloli.png";
+	public static final String DISLOLI		= "sprites/boss/disloli.png";
 	public static final String GARM			= "sprites/garm.png";
 	public static final String DREAMER		= "sprites/dreamer.png";
 	public static final String AEGIS		= "sprites/aegis.png";
@@ -53,7 +50,7 @@ public class Assets {
 	public static final String PROWLER		= "sprites/girlpd/prowler.png";
 	public static final String EXCU			= "sprites/boss/excutioner.png";
 
-	public static final String MASTAR_HEAD			= "sprites/boss/master_head.png";
+	public static final String MASTAR_HEAD	= "sprites/boss/master_head.png";
 	public static final String DISTORY		= "sprites/boss/disloli.png";
 	public static final String GOLYAT		= "sprites/girlpd/golyat.png";
 	public static final String MG5	    	= "sprites/girlpd/mg5.png";
@@ -63,7 +60,7 @@ public class Assets {
 	public static final String ACYCLOPS		= "sprites/girlpd/acyclops.png";
 	public static final String HYDRA		= "sprites/girlpd/hydra.png";
 	public static final String GOLYATPLUS	= "sprites/girlpd/golyatplus.png";
-
+	
 	public static class Effects {
 		public static final String EFFECTS      = "effects/effects.png";
 		public static final String FIREBALL     = "effects/fireball.png";
@@ -77,16 +74,15 @@ public class Assets {
 		public static final String TERRAIN_FEATURES = "environment/terrain_features.png";
 
 		public static final String VISUAL_GRID  = "environment/visual_grid.png";
-		public static final String WALL_BLOCKING= "environment/wall_blocking.png";
 
-		public static final String TILES_SEWERS     = "environment/tiles_sewers.png";
-		public static final String TILES_PRISON     = "environment/tiles_prison.png";
-		public static final String TILES_CAVES      = "environment/tiles_caves.png";
-		public static final String TILES_CAVES_BOSS = "environment/tiles_caves_boss.png";
-		public static final String TILES_CITY       = "environment/tiles_city.png";
-
-		public static final String TILES_RECAVES   = "environment/tiles_recaves.png";
-		public static final String TILES_HALLS  = "environment/tiles_halls.png";
+		public static final String TILES_ZERO_LEVEL="environment/tiles_zero_level.png";
+		public static final String TILES_SEWERS    ="environment/tiles_sewers.png";
+		public static final String TILES_PRISON    ="environment/tiles_prison.png";
+		public static final String TILES_CAVES     ="environment/tiles_caves.png";
+		public static final String TILES_CAVES_BOSS="environment/tiles_caves_boss.png";
+		public static final String TILES_CITY      ="environment/tiles_city.png";
+		public static final String TILES_RECAVES   ="environment/tiles_recaves.png";
+		public static final String TILES_HALLS     ="environment/tiles_halls.png";
 
 		public static final String WATER_SEWERS = "environment/water0.png";
 		public static final String WATER_PRISON = "environment/water1.png";
@@ -110,6 +106,9 @@ public class Assets {
 	}
 
 	public static class Interfaces {
+		public static final String SAVESLOT	= "interfaces/save_slot_ui.png";
+		public static final String PORTRAIT1= "interfaces/portrait1.png";
+		
 		public static final String ARCS_BG  = "interfaces/arcs1.png";
 		public static final String ARCS_FG  = "interfaces/arcs2.png";
 
@@ -290,12 +289,15 @@ public class Assets {
 		public static final String WARRIOR  = "sprites/warrior.png";
 		public static final String MAGE     = "sprites/mage.png";
 		public static final String ROGUE    = "sprites/rogue.png";
-		public static final String HUNTRESS = "sprites/huntress.png";
+		public static final String HUNTRESS = "sprites/sun.png";
 		public static final String TYPE561  = "sprites/type56.png";
+		public static final String GSH18    = "sprites/gsh18.png";
+		public static final String HK416    = "sprites/hk416.png";
 		public static final String AVATARS  = "sprites/avatars.png";
 		public static final String PET      = "sprites/pet.png";
 		public static final String AMULET   = "sprites/amulet.png";
 
+		public static final String NOEL       = "sprites/noel.png";
 		public static final String RAT        = "sprites/rat.png";
 		public static final String FETID_RAT  = "sprites/fetid_rat.png";
 		public static final String BRUTE      = "sprites/brute.png";

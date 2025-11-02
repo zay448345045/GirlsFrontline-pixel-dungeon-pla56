@@ -30,7 +30,7 @@ import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.InterlevelScene;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
-import com.shatteredpixel.shatteredpixeldungeon.scenes.ZeroLevelScene;
+import com.shatteredpixel.shatteredpixeldungeon.scenes.TitleScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.HeroSprite;
 import com.shatteredpixel.shatteredpixeldungeon.ui.ActionIndicator;
 import com.shatteredpixel.shatteredpixeldungeon.ui.Button;
@@ -54,6 +54,7 @@ public class WndGameInProgress extends Window {
 	private float pos;
 	
 	public WndGameInProgress(final int slot){
+		super();
 		
 		final GamesInProgress.Info info = GamesInProgress.check(slot);
 		
@@ -116,6 +117,7 @@ public class WndGameInProgress extends Window {
 		if (info.shld > 0)  statSlot( Messages.get(this, "health"), info.hp + "+" + info.shld + "/" + info.ht );
 		else                statSlot( Messages.get(this, "health"), (info.hp) + "/" + info.ht );
 		statSlot( Messages.get(this, "exp"), info.exp + "/" + Hero.maxExp(info.level) );
+		statSlot( Messages.get(this, "hunger"), String.valueOf(info.hunger) ); // 添加饥饿值显示
 		
 		pos += GAP;
 		statSlot( Messages.get(this, "gold"), info.goldCollected );
@@ -127,8 +129,6 @@ public class WndGameInProgress extends Window {
 			@Override
 			protected void onClick() {
 				super.onClick();
-				try{Dungeon.saveAll();}
-				catch(IOException e){Game.reportException(e);}
 				
 				Dungeon.hero = null;
 				ActionIndicator.action = null;

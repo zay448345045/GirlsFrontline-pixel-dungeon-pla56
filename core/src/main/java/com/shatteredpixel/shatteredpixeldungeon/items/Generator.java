@@ -48,6 +48,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.food.Food;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.Maccol;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.MysteryMeat;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.Pasty;
+import com.shatteredpixel.shatteredpixeldungeon.items.food.Choco;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.Potion;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfExperience;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfFrost;
@@ -122,11 +123,14 @@ import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.DMR.Kar98;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.DMR.M16;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.DMR.M99;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.DMR.Sass;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.DMR.AN94;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MagesStaff;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Cypros;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Gun561;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Gun562;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.HB.Kriss;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.LR.M1911;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.LR.GSH18;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.LR.NAGANT;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.LR.Wa;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Launcher.Gepard;
@@ -149,6 +153,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.SMG.Ump45;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.SR.AWP;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.SR.M1903;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.SR.Ntw20;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.SR.MOSINNAGANT;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.SakuraBlade;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Thunder;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.UG.C96;
@@ -360,9 +365,10 @@ public class Generator {
 					SR3.class,
                     Cannon.class,
 					SRS.class,
-					Thunder.class
+					Thunder.class,
+					GSH18.class
 			};
-			WEP_T1.probs = new float[]{ 0, 1, 0, 1, 1, 1, 1, 0, 0, 0.09f };
+			WEP_T1.probs = new float[]{ 0, 1, 0, 1, 1, 1, 1, 0, 0, 0.09f, 0.75f };
 			
 			WEP_T2.classes = new Class<?>[]{
 					M16.class,
@@ -371,8 +377,9 @@ public class Generator {
 					M1a1.class,
 					G36.class,
 					NagantRevolver.class,
+					Cypros.class
 			};
-			WEP_T2.probs = new float[]{ 5, 4, 5, 4, 4, 4 };
+			WEP_T2.probs = new float[]{ 5, 4, 5, 4, 4, 4 ,0 };
 			
 			WEP_T3.classes = new Class<?>[]{
 					Ks23.class,
@@ -382,9 +389,10 @@ public class Generator {
 					Kriss.class,
 					Wa.class,
 					C96.class,
-					Gun562.class
+					Gun562.class,
+					MOSINNAGANT.class
 			};
-			WEP_T3.probs = new float[]{ 6, 5, 5, 4, 4, 4, 2, 0 };
+			WEP_T3.probs = new float[]{ 6, 5, 5, 4, 4, 4, 2, 0 ,2 };
 			
 			WEP_T4.classes = new Class<?>[]{
 					Win97.class,
@@ -392,9 +400,10 @@ public class Generator {
 					AWP.class,
 					AK47.class,
 					GUA91.class,
-					Gepard.class
+					Gepard.class,
+					AN94.class
 			};
-			WEP_T4.probs = new float[]{ 6, 5, 5, 5, 4, 6 };
+			WEP_T4.probs = new float[]{ 6, 5, 5, 5, 4, 6 ,2 };
 			
 			WEP_T5.classes = new Class<?>[]{
 					Sass.class,
@@ -464,10 +473,11 @@ public class Generator {
 			
 			FOOD.classes = new Class<?>[]{
 					Food.class,
+					Choco.class,
 					Pasty.class,
 					MysteryMeat.class,
 					Maccol.class};
-			FOOD.probs = new float[]{ 4, Dungeon.isChallenged(NO_FOOD) ? 0 : 1, 0,  Dungeon.isChallenged(NO_FOOD) ? 1 : 0 };
+			FOOD.probs = new float[]{ 4, 0, Dungeon.isChallenged(NO_FOOD) ? 0 : 1, 0,  Dungeon.isChallenged(NO_FOOD) ? 1 : 0 };
 			
 			RING.classes = new Class<?>[]{
 					RingOfAccuracy.class,
@@ -589,7 +599,7 @@ public class Generator {
 	}
 
 	public static Armor randomArmor(){
-		return randomArmor(Dungeon.depth / 5);
+		return randomArmor(Dungeon.curDepth() / 5);
 	}
 	
 	public static Armor randomArmor(int floorSet) {
@@ -611,7 +621,7 @@ public class Generator {
 	};
 
 	public static MeleeWeapon randomWeapon(){
-		return randomWeapon(Dungeon.depth / 5);
+		return randomWeapon(Dungeon.curDepth() / 5);
 	}
 	
 	public static MeleeWeapon randomWeapon(int floorSet) {
@@ -633,7 +643,7 @@ public class Generator {
 	};
 	
 	public static MissileWeapon randomMissile(){
-		return randomMissile(Dungeon.depth / 5);
+		return randomMissile(Dungeon.curDepth() / 5);
 	}
 	
 	public static MissileWeapon randomMissile(int floorSet) {

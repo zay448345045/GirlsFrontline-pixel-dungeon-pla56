@@ -41,6 +41,23 @@ task alpha(type: JavaExec) {
     }
 }
 
+// 添加此build任务, 用于打包debug版本运行 适合没有开发环境的但想测试游戏的的其他成员使用 目前仅支持windows, linux
+task debugJar(type: Jar) {
+    archiveFileName = "${project.name}-debug.jar"
+    setDuplicatesStrategy(DuplicatesStrategy.EXCLUDE)
+    from sourceSets.main.output
+    dependsOn configurations.runtimeClasspath
+    from { configurations.runtimeClasspath.findAll { it.name.endsWith('jar') }.collect { zipTree(it) } }
+
+    manifest {
+        attributes 'Main-Class': appMainClass
+        attributes 'Specification-Title': appName
+        attributes 'Implementation-Title': appPackageName
+        attributes 'Specification-Version': appVersionName  + "-debugNoRelease"
+        attributes 'Implementation-Version': appVersionCode
+    }
+}
+
 task release(type: Jar) {
     //FIXME this is now needed as of gradle 7.0, due to our weird sourceSets setup. Should see if there's a better way to do this
     setDuplicatesStrategy(DuplicatesStrategy.EXCLUDE)

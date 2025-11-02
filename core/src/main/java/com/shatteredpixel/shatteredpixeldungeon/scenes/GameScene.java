@@ -77,7 +77,6 @@ import com.shatteredpixel.shatteredpixeldungeon.tiles.FogOfWar;
 import com.shatteredpixel.shatteredpixeldungeon.tiles.GridTileMap;
 import com.shatteredpixel.shatteredpixeldungeon.tiles.RaisedTerrainTilemap;
 import com.shatteredpixel.shatteredpixeldungeon.tiles.TerrainFeaturesTilemap;
-import com.shatteredpixel.shatteredpixeldungeon.tiles.WallBlockingTilemap;
 import com.shatteredpixel.shatteredpixeldungeon.ui.ActionIndicator;
 import com.shatteredpixel.shatteredpixeldungeon.ui.AttackIndicator;
 import com.shatteredpixel.shatteredpixeldungeon.ui.Banner;
@@ -118,10 +117,8 @@ import com.shatteredpixel.shatteredpixeldungeon.windows.WndInfoTrap;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndKeyBindings;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndMessage;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndOptions;
-import com.shatteredpixel.shatteredpixeldungeon.windows.WndSaveSlot;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndResurrect;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndStartGame;
-import com.shatteredpixel.shatteredpixeldungeon.windows.WndStory;
 import com.watabou.glwrap.Blending;
 import com.watabou.input.PointerEvent;
 import com.watabou.noosa.Camera;
@@ -156,7 +153,6 @@ public class GameScene extends PixelScene {
 	private TerrainFeaturesTilemap terrainFeatures;
 	private RaisedTerrainTilemap raisedTerrain;
 	private DungeonWallsTilemap walls;
-	private WallBlockingTilemap wallBlocking;
 	private FogOfWar fog;
 	private HeroSprite hero;
 
@@ -207,7 +203,7 @@ public class GameScene extends PixelScene {
 	public void create() {
 		
 		if (Dungeon.hero == null || Dungeon.level == null){
-			GirlsFrontlinePixelDungeon.switchScene(ZeroLevelScene.class);
+			GirlsFrontlinePixelDungeon.switchScene(TitleScene.class);
 			return;
 		}
 
@@ -251,10 +247,11 @@ public class GameScene extends PixelScene {
 		
 		tiles = new DungeonTerrainTilemap();
 		terrain.add( tiles );
+		//tiles.camera();
+		//terrain.remove(tiles);
 
 		customTiles = new Group();
 		terrain.add(customTiles);
-
 		for( CustomTilemap visual : Dungeon.level.customTiles){
 			addCustomTile(visual);
 		}
@@ -273,7 +270,6 @@ public class GameScene extends PixelScene {
 
 		heaps = new Group();
 		add( heaps );
-		
 		for ( Heap heap : Dungeon.level.heaps.valueList() ) {
 			addHeapSprite( heap );
 		}
@@ -307,13 +303,9 @@ public class GameScene extends PixelScene {
 
 		customWalls = new Group();
 		add(customWalls);
-
 		for( CustomTilemap visual : Dungeon.level.customWalls){
 			addCustomWall(visual);
 		}
-
-		wallBlocking = new WallBlockingTilemap();
-		add (wallBlocking);
 
 		add( emitters );
 		add( effects );
@@ -325,7 +317,6 @@ public class GameScene extends PixelScene {
 			blob.emitter = null;
 			addBlobSprite( blob );
 		}
-
 
 		fog = new FogOfWar( Dungeon.level.width(), Dungeon.level.height() );
 		add( fog );
@@ -418,42 +409,36 @@ public class GameScene extends PixelScene {
 			case DESCEND:
 			case FALL:
 				switch (Dungeon.depth) {
-				case 1:
-					if(Script.checkChapter(Script.ID_SEWERS)) {
-						GameScene.scene.add(new WndDialog(new LevelPlot_P1(),false));
-					}
-					WndStory.showChapter( WndStory.ID_SEWERS );
-					break;
-				case 6:
-					if(Script.checkChapter(Script.ID_PRISON)) {
-						GameScene.scene.add(new WndDialog(new LevelPlot_P2(),false));
-					}
-					WndStory.showChapter( WndStory.ID_PRISON );
-					break;
-				case 11:
-					if(Script.checkChapter(Script.ID_CAVES)) {
-						GameScene.scene.add(new WndDialog(new LevelPlot_P3(),false));
-					}
-					WndStory.showChapter( WndStory.ID_CAVES );
-					break;
-				case 16:
-					if(Script.checkChapter(Script.ID_CITY)) {
-						GameScene.scene.add(new WndDialog(new LevelPlot_P4(),false));
-					}
-					WndStory.showChapter( WndStory.ID_CITY );
-					break;
-				case 21:
-					if(Script.checkChapter(Script.ID_RECAVES)) {
-						GameScene.scene.add(new WndDialog(new LevelPlot_P5(),false));
-					}
-					WndStory.showChapter( WndStory.ID_RECAVES );
-					break;
-				case 26:
-					if(Script.checkChapter(Script.ID_HALLS)) {
-						GameScene.scene.add(new WndDialog(new LevelPlot_P6(),false));
-					}
-					WndStory.showChapter( WndStory.ID_HALLS );
-					break;
+					case 1:
+						if(Script.checkChapter(Script.ID_SEWERS)) {
+							GameScene.scene.add(new WndDialog(new LevelPlot_P1()));
+						}
+						break;
+					case 6:
+						if(Script.checkChapter(Script.ID_PRISON)) {
+							GameScene.scene.add(new WndDialog(new LevelPlot_P2()));
+						}
+						break;
+					case 11:
+						if(Script.checkChapter(Script.ID_CAVES)) {
+							GameScene.scene.add(new WndDialog(new LevelPlot_P3()));
+						}
+						break;
+					case 16:
+						if(Script.checkChapter(Script.ID_CITY)) {
+							GameScene.scene.add(new WndDialog(new LevelPlot_P4()));
+						}
+						break;
+					case 21:
+						if(Script.checkChapter(Script.ID_RECAVES)) {
+							GameScene.scene.add(new WndDialog(new LevelPlot_P5()));
+						}
+						break;
+					case 26:
+						if(Script.checkChapter(Script.ID_HALLS)) {
+							GameScene.scene.add(new WndDialog(new LevelPlot_P6()));
+						}
+						break;
 				}
 				if (Dungeon.hero.isAlive()) {
 					Badges.validateNoKilling();
@@ -539,9 +524,6 @@ public class GameScene extends PixelScene {
 						}
 					}
 				}
-				
-			} else if (InterlevelScene.mode == InterlevelScene.Mode.RESET) {
-				GLog.h(Messages.get(this, "warp"));
 			} else if (InterlevelScene.mode == InterlevelScene.Mode.RESURRECT) {
 				GLog.h(Messages.get(this, "resurrect"), Dungeon.depth);
 			} else {
@@ -1177,21 +1159,18 @@ public class GameScene extends PixelScene {
 	public static void updateFog(){
 		if (scene != null) {
 			scene.fog.updateFog();
-			scene.wallBlocking.updateMap();
 		}
 	}
 
 	public static void updateFog(int x, int y, int w, int h){
 		if (scene != null) {
 			scene.fog.updateFogArea(x, y, w, h);
-			scene.wallBlocking.updateArea(x, y, w, h);
 		}
 	}
 	
 	public static void updateFog( int cell, int radius ){
 		if (scene != null) {
 			scene.fog.updateFog( cell, radius );
-			scene.wallBlocking.updateArea( cell, radius );
 		}
 	}
 	

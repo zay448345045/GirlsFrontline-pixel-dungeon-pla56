@@ -34,6 +34,9 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 
+// 在文件顶部的import部分添加以下导入语句
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Hunger;
+
 public class GamesInProgress {
 	
 	public static final int MAX_SLOTS = 10;
@@ -61,8 +64,8 @@ public class GamesInProgress {
 		return gameFolder(slot) + "/" + GAME_FILE;
 	}
 	
-	public static String depthFile( int slot, int depth ) {
-		return gameFolder(slot) + "/" + Messages.format(DEPTH_FILE, depth);
+	public static String depthFile( int slot, int levelId ) {
+		return gameFolder(slot) + "/" + Messages.format(DEPTH_FILE,levelId);
 	}
 	
 	public static int firstEmpty(){
@@ -136,6 +139,7 @@ public class GamesInProgress {
 		info.hp = hero.HP;
 		info.ht = hero.HT;
 		info.shld = hero.shielding();
+		info.hunger = (int)hero.buff(Hunger.class).hunger(); // 设置饥饿值
 		info.heroClass = hero.heroClass;
 		info.subClass = hero.subClass;
 		info.armorTier = hero.tier();
@@ -168,8 +172,9 @@ public class GamesInProgress {
 		public int hp;
 		public int ht;
 		public int shld;
-		public HeroClass heroClass = HeroClass.NONE;
-		public HeroSubClass subClass;
+		public int hunger; // 添加饥饿值字段
+		public HeroClass    heroClass=HeroClass   .NONE;
+		public HeroSubClass subClass =HeroSubClass.NONE;
 		public int armorTier;
 		
 		public int goldCollected;
